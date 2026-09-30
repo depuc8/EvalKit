@@ -1,0 +1,68 @@
+# Fail the build when your agent gets worse.
+#
+# Copy to .github/workflows/evalkit-regression.yml and adapt the three marked lines.
+#
+# One-time setup, on a known-good commit:
+#   evalkit run --dataset evals/golden.jsonl --agent my_pkg.agent:graph \
+#       --save-baseline evals/baseline.json
+#   git add evals/baseline.json && git commit
+#
+# After that every pull request is compared with that baseline. When you *intend* to change
+# quality, regenerate the baseline in the same PR so reviewers see the new numbers.
+
+name: Agent evaluation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evalkit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install # (1) however you install your agent's dependencies
+        run: pip install -e ".[dev]" "evalkit-agents[langgraph]"
+
+      - name: Evaluate against the stored baseline
+        env:
+          # Only needed if your agent or an LLM judge calls a hosted model.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -o pipefail
+          evalkit run \
+            --dataset evals/golden.jsonl \
+            --agent my_pkg.agent:graph \
+            --baseline evals/baseline.json \
+            --max-regression 0.02 \
+            --max-cost-increase 0.15 \
+            --fail-under accuracy=0.80 \
+            --concurrency 4 -q | tee evalkit-summary.txt
+        # (2) dataset  (3) agent module:attribute.  Exit code 1 fails the job on a regression.
+
+      - name: Publish summary
+        if: always()
+        run: |
+          {
+            echo "## Agent evaluation"
+            echo '```text'
+            cat evalkit-summary.txt 2>/dev/null || echo "evaluation did not complete"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload HTML report and traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evalkit-report
+          path: evalkit_results/
+          retention-days: 14

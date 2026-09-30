@@ -1,0 +1,38 @@
+name: Bug report
+description: Something isn't working as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The command or code, plus a tiny dataset or agent if relevant. Please remove secrets and private data.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output / traceback
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: EvalKit version
+      description: Output of `evalkit --version`
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Python and framework versions
+      description: e.g. Python 3.12, langgraph 1.2.22, langchain-core 1.8.2
+    validations:
+      required: true

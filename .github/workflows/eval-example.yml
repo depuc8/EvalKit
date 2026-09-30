@@ -1,0 +1,46 @@
+name: Eval regression (example agent)
+
+# Dogfoods EvalKit: runs the bundled example against its committed baseline.
+# Copy examples/github-actions/evalkit-regression.yml to use this in your own project.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[langgraph]"
+      - name: Evaluate against baseline
+        run: |
+          set -o pipefail
+          evalkit run \
+            --dataset examples/rag_agent/golden.jsonl \
+            --agent examples.rag_agent.agent:agent \
+            --pricing examples/rag_agent/pricing.json \
+            --baseline examples/rag_agent/baseline.json \
+            --max-regression 0.02 \
+            --fail-under accuracy=0.85 -q | tee evalkit-summary.txt
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo '```text'
+            cat evalkit-summary.txt || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evalkit-report
+          path: evalkit_results/

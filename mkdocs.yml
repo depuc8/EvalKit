@@ -1,0 +1,38 @@
+site_name: EvalKit
+site_description: Evaluate and debug LLM agents
+repo_url: https://github.com/evalkit/evalkit
+theme:
+  name: material
+  features: [navigation.sections, content.code.copy]
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: ['.']
+  - toc:
+      permalink: true
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Concepts:
+      - Traces: traces.md
+      - Datasets: datasets.md
+      - Running evaluations: running.md
+  - Scorers:
+      - Overview: scorers/index.md
+      - Accuracy: scorers/accuracy.md
+      - Groundedness: scorers/groundedness.md
+      - Safety: scorers/safety.md
+      - Latency & cost: scorers/latency-cost.md
+      - Tool use: scorers/tool-use.md
+      - Writing a custom scorer: scorers/custom.md
+  - Debugging:
+      - Replay and diff: replay.md
+  - CI:
+      - Pytest plugin, baselines, GitHub Action: ci.md
+  - Extending:
+      - Framework adapters: adapters.md
+  - Project:
+      - Changelog: changelog.md
