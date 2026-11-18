@@ -1,5 +1,7 @@
 # EvalKit
 
+[![PyPI](https://img.shields.io/pypi/v/evalkit-agents)](https://pypi.org/project/evalkit-agents/)
+
 Evaluate and debug LLM agents. EvalKit records every agent run as a structured **trace**,
 scores it with pluggable **scorers**, runs whole **golden datasets** with concurrency, writes
 terminal / JSON / HTML **reports**, lets you **replay** a failed case with a different prompt
