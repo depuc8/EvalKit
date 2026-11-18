@@ -6,7 +6,7 @@ you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 ## Getting started
 
 ```bash
-git clone https://github.com/evalkit/evalkit && cd evalkit
+git clone https://github.com/depuc8/EvalKit && cd EvalKit
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev,docs]"
 pytest                      # runs the suite and enforces >= 90% coverage

@@ -1,6 +1,6 @@
 site_name: EvalKit
 site_description: Evaluate and debug LLM agents
-repo_url: https://github.com/evalkit/evalkit
+repo_url: https://github.com/depuc8/EvalKit
 theme:
   name: material
   features: [navigation.sections, content.code.copy]

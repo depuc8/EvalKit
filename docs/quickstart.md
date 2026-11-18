@@ -12,7 +12,7 @@ The repository contains a sample LangGraph RAG agent and a 50-case golden datase
 uses a deterministic offline model, so there is nothing to configure.
 
 ```bash
-git clone https://github.com/evalkit/evalkit && cd evalkit
+git clone https://github.com/depuc8/EvalKit && cd EvalKit
 pip install -e ".[dev]"
 evalkit run \
   --dataset examples/rag_agent/golden.jsonl \

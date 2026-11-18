@@ -25,5 +25,5 @@ Initial release.
   example GitHub Actions workflow.
 - Example LangGraph RAG agent with a 50-case golden dataset (runs offline).
 
-[Unreleased]: https://github.com/evalkit/evalkit/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/evalkit/evalkit/releases/tag/v0.1.0
+[Unreleased]: https://github.com/depuc8/EvalKit/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/depuc8/EvalKit/releases/tag/v0.1.0

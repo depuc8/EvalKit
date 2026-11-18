@@ -34,7 +34,7 @@ The repository ships a sample LangGraph RAG agent (`retrieve → calculate → g
 is needed.
 
 ```bash
-git clone https://github.com/evalkit/evalkit && cd evalkit
+git clone https://github.com/depuc8/EvalKit && cd EvalKit
 pip install -e ".[dev]"
 
 # 1. Run the evaluation (50 cases, 4 at a time) and write reports to ./evalkit_results

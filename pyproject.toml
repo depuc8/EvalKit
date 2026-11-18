@@ -57,10 +57,10 @@ evalkit = "evalkit.cli:main"
 evalkit = "evalkit.pytest_plugin"
 
 [project.urls]
-Homepage = "https://github.com/evalkit/evalkit"
-Documentation = "https://evalkit.github.io/evalkit"
-Changelog = "https://github.com/evalkit/evalkit/blob/main/CHANGELOG.md"
-Issues = "https://github.com/evalkit/evalkit/issues"
+Homepage = "https://github.com/depuc8/EvalKit"
+Documentation = "https://depuc8.github.io/EvalKit"
+Changelog = "https://github.com/depuc8/EvalKit/blob/main/CHANGELOG.md"
+Issues = "https://github.com/depuc8/EvalKit/issues"
 
 [tool.hatch.version]
 path = "src/evalkit/_version.py"

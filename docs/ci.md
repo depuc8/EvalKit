@@ -62,7 +62,7 @@ in a reviewed commit, when you accept a change in quality.
 
 ## GitHub Action
 
-[`examples/github-actions/evalkit-regression.yml`](https://github.com/evalkit/evalkit/blob/main/examples/github-actions/evalkit-regression.yml)
+[`examples/github-actions/evalkit-regression.yml`](https://github.com/depuc8/EvalKit/blob/main/examples/github-actions/evalkit-regression.yml)
 is a ready-to-copy workflow: it installs your project, runs the evaluation against the stored
 baseline, writes the summary to the job page, uploads the HTML report as an artifact, and fails
 the build on regressions.
