@@ -13,6 +13,7 @@ Three pieces:
 from __future__ import annotations
 
 import asyncio
+import sys
 import threading
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any
@@ -32,6 +33,9 @@ from evalkit.adapters.base import AgentAdapter
 from evalkit.capture import TraceRecorder, current_recorder, normalize_documents, to_jsonable
 from evalkit.replay import ReplayError, StepOverride, current_plan
 from evalkit.trace import LLMCall, TokenUsage, ToolCall
+
+#: Async runs only propagate LangChain's callback context into node code on Python >= 3.11.
+_ASYNC_CONTEXT_PROPAGATES = sys.version_info >= (3, 11)
 
 _ROLES = {"human": "user", "ai": "assistant", "system": "system", "tool": "tool"}
 _ANSWER_KEYS = ("answer", "output", "response", "final_answer", "result")
@@ -307,6 +311,10 @@ class LangGraphAdapter(AgentAdapter):
         measure_ttft: stream the graph in ``messages`` mode so streaming-capable models
             report time-to-first-token. Disable if your graph misbehaves when streamed.
         config: extra ``RunnableConfig`` (e.g. ``{"recursion_limit": 50}``).
+
+    On Python 3.10 the async entry point runs the graph through its synchronous path in a
+    worker thread (see ``_ASYNC_CONTEXT_PROPAGATES``), so graphs with ``async def``-only nodes
+    need Python 3.11 or newer.
     """
 
     def __init__(
@@ -355,6 +363,10 @@ class LangGraphAdapter(AgentAdapter):
         return self.extract_answer(state)
 
     async def ainvoke(self, input: Any, recorder: TraceRecorder) -> Any:
+        if not _ASYNC_CONTEXT_PROPAGATES:
+            # Before Python 3.11 LangChain loses the callback context for calls made inside
+            # nodes during an async run, so tool/LLM/retriever steps would silently go missing.
+            return await asyncio.to_thread(self.invoke, input, recorder)
         payload, config = self._payload(input), self._config(recorder)
         if not self.measure_ttft:
             return self.extract_answer(await self.graph.ainvoke(payload, config))

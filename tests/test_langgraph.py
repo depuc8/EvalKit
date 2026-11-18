@@ -312,3 +312,18 @@ def test_apply_override_variants() -> None:
     replaced = _apply_override(msgs, StepOverride(system="fresh"))
     assert [m.content for m in replaced] == ["fresh", "hi"]
     assert _apply_override(msgs, StepOverride(model="m")) is msgs
+
+
+async def test_ainvoke_uses_sync_path_when_async_context_is_lost(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Python < 3.11 drops LangChain's callback context in async runs; steps must still appear."""
+    from evalkit.adapters import langgraph as lg
+
+    monkeypatch.setattr(lg, "_ASYNC_CONTEXT_PROPAGATES", False)
+    rec = TraceRecorder()
+    output = await LangGraphAdapter(build()).ainvoke("legacy python", rec)
+    trace = rec.finish()
+    assert "legacy python" in output
+    assert trace.llm_steps and trace.retrieved_context()
+    assert [t.name for t in trace.tool_calls] == ["shout"]

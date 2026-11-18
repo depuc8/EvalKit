@@ -34,6 +34,10 @@ trace = rec.finish(output=...)
 - Graph **nodes** are recorded as `node` steps; inner runnables are folded into them.
 - **Time to first token** is only available for streaming models. The adapter streams the graph
   in `messages` mode so streaming-capable models report it; pass `measure_ttft=False` to disable.
+- **Python 3.10:** LangChain cannot pass its callback context into node code during async runs
+  before Python 3.11, so tool, LLM and retriever steps would go missing. On 3.10 the adapter runs
+  the graph through its synchronous path in a worker thread instead. Graphs whose nodes are
+  `async def`-only need Python 3.11 or newer.
 - **Retrieved context** comes from LangChain retrievers automatically. For retrieval done in a
   tool, list the tool names: `LangGraphAdapter(graph, context_tools={"search_docs"})`.
 
