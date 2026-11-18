@@ -6,11 +6,6 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### Fixed
-- LangGraph adapter on Python 3.10: async runs dropped tool, LLM and retriever steps from traces
-  (LangChain loses its callback context before Python 3.11). The async entry point now uses the
-  synchronous path on 3.10.
-
 ## [0.1.0] - 2026-11-18
 
 Initial release.
